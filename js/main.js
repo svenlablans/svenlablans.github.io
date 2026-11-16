@@ -65,7 +65,7 @@
   }
 
   const nav = [
-    { label: "Work", href: "work.html", key: "work" },
+    { label: "Work", href: "index.html", key: "work" },
     { label: "About", href: "about.html", key: "about" },
     { label: "Contact", href: "contact.html", key: "contact" },
   ];
@@ -85,7 +85,7 @@
       <a href="index.html" class="logo">${esc(S.name)}</a>
       <button class="menu-toggle" aria-label="Open menu" aria-expanded="false"><span></span><span></span></button>
       <nav class="nav">
-        ${nav.map((n, k) => `<a href="${n.href}" class="${page === n.key || (page === "project" && n.key === "work") ? "active" : ""}">${n.label}</a>${k < nav.length - 1 ? '<span class="comma">,</span>' : ""}`).join("")}
+        ${nav.map((n, k) => `<a href="${n.href}" class="${page === n.key || ((page === "project" || page === "home") && n.key === "work") ? "active" : ""}">${n.label}</a>${k < nav.length - 1 ? '<span class="comma">,</span>' : ""}`).join("")}
       </nav>
     </div>`;
   }
@@ -123,24 +123,15 @@
   /* ---------- Page bodies ---------- */
   const pages = {
     home(S, P) {
+      const html = pages.work(S, P);
       document.title = `${S.name} — ${S.tagline}`;
-      return `
-      <section class="container home-work">
-        <div class="section-head reveal">
-          ${t("h2", "site.homeWorkTitle", S.homeWorkTitle)}
-          <a href="work.html" class="link">View all</a>
-        </div>
-        <div class="grid">${P.slice(0, S.homeProjectCount).map(card).join("")}</div>
-      </section>`;
+      return html;
     },
 
     work(S, P) {
       document.title = `Work — ${S.name}`;
       return `
-      <section class="container page-head">
-        <h1 class="reveal">${t("span", "site.workTitle", S.workTitle)}<span class="count">(${P.length})</span></h1>
-      </section>
-      <section class="container section" style="padding-top:56px">
+      <section class="container section home-work">
         <div class="grid">${P.map(card).join("")}</div>
       </section>`;
     },
@@ -195,7 +186,7 @@
       const p = P[i];
       if (!p) {
         document.title = `Not found — ${S.name}`;
-        return `<div class="container page-head"><h1>Project not found</h1><p style="margin-top:24px"><a class="btn" href="work.html">Back to work →</a></p></div>`;
+        return `<div class="container page-head"><h1>Project not found</h1><p style="margin-top:24px"><a class="btn" href="index.html">Back to work →</a></p></div>`;
       }
       document.title = `${p.title} — ${S.name}`;
       const base = `projects.${i}`;
@@ -249,7 +240,7 @@
 
       ${nextUp.length ? `
         <section class="container section more-works">
-          <div class="section-head"><h2>More works</h2><a href="work.html" class="link">View All</a></div>
+          <div class="section-head"><h2>More works</h2><a href="index.html" class="link">View All</a></div>
           <div class="grid grid-3">${nextUp.map(card).join("")}</div>
         </section>` : ""}`;
     },

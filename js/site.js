@@ -10,8 +10,6 @@ window.SITE = {
     "buttonLabel": "About me",
     "buttonLink": "about.html"
   },
-  "homeWorkTitle": "Latest work",
-  "workTitle": "Selected work",
   "homeProjectCount": 6,
   "about": {
     "title": "I help brands find their voice and make it look good.",

@@ -3,7 +3,7 @@
 window.PROJECTS = [
   {
     "slug": "northwind",
-    "title": "Northwind",
+    "title": "JDLS",
     "tagline": "Calm in motion",
     "client": "Northwind Studio",
     "year": "2025",
@@ -59,16 +59,15 @@ window.PROJECTS = [
   },
   {
     "slug": "fieldnotes",
-    "title": "Fieldnotes",
-    "tagline": "Writing, simplified",
-    "client": "Fieldnotes App",
+    "title": "Unfair",
+    "tagline": "Campagne 2024",
+    "client": "Unfair",
     "year": "2024",
     "type": [
-      "Web Design",
-      "Product"
+      "Campaign"
     ],
     "cover": "images/projects/fieldnotes/tempimagelhpmuw-20261113174910.jpg",
-    "intro": "Website and product design for a distraction-free writing app.",
+    "intro": "Unfair 2025 was",
     "description": [
       "We stripped the interface back to the essentials and let typography do the heavy lifting."
     ],
@@ -78,7 +77,15 @@ window.PROJECTS = [
         "shape": "portrait"
       },
       {
-        "src": "images/projects/fieldnotes/uf24-feed-snippet-5-20261113185004.mp4",
+        "src": "images/projects/fieldnotes/uf24-feed-snippet-4-20261113222903.mp4",
+        "shape": "portrait"
+      },
+      {
+        "src": "images/projects/fieldnotes/tempimagevvjgl5-20261113222803.jpg",
+        "shape": "landscape"
+      },
+      {
+        "src": "images/projects/fieldnotes/uf24-feed-snippet-4-20261113222838.mp4",
         "shape": "portrait"
       }
     ],
@@ -91,20 +98,28 @@ window.PROJECTS = [
   },
   {
     "slug": "lumen",
-    "title": "Lumen",
-    "tagline": "Light, reconsidered",
-    "client": "Lumen Lighting",
+    "title": "Popronde",
+    "tagline": "Campagne 2024",
+    "client": "Poprone",
     "year": "2024",
     "type": [
-      "Campaign",
-      "Art Direction"
+      "Campaign"
     ],
     "cover": "images/projects/lumen/1-l-20261113185116.mp4",
     "intro": "A launch campaign for a lighting brand, shot entirely at dusk.",
     "description": [
       "The campaign leaned into the hour when artificial and natural light meet."
     ],
-    "images": [],
+    "images": [
+      {
+        "src": "images/projects/lumen/tempimage2srtqh-20261113223107.jpg",
+        "shape": "landscape"
+      },
+      {
+        "src": "images/projects/lumen/2-l-20261113223124.mp4",
+        "shape": "landscape"
+      }
+    ],
     "credits": [
       {
         "role": "Art Direction",
