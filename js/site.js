@@ -10,7 +10,13 @@ window.SITE = {
     "buttonLabel": "About me",
     "buttonLink": "about.html"
   },
-  "showreel": "images/showreel/showreel-cover.jpg",
+  "showreel": [
+    "images/showreel/showreel-cover.jpg",
+    "images/projects/northwind/file-mp4-1080p-5-20261113174745.mp4",
+    "images/projects/atlas-coffee/file-mp4e-1080p-20261113175850.mp4",
+    "images/projects/fieldnotes/tempimagelhpmuw-20261113174910.jpg",
+    "images/projects/lumen/1-l-20261113185116.mp4"
+  ],
   "homeImageRows": 6,
   "cases": [
     {

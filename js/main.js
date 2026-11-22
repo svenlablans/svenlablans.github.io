@@ -19,7 +19,7 @@
     const edit = path ? `data-img="${path}" data-slug="${esc(slug)}"` : "";
     if (!src) return `<div class="img-placeholder" ${edit}>${path ? "Add image or video" : esc(alt)}</div>`;
     if (isVideo(src))
-      return `<video src="${esc(src)}" autoplay muted loop playsinline preload="${eager ? "auto" : "metadata"}" aria-label="${esc(alt)}" ${edit}></video>`;
+      return `<video src="${esc(src)}" data-autoplay muted loop playsinline preload="${eager ? "metadata" : "none"}" aria-label="${esc(alt)}" ${edit}></video>`;
     return `<img src="${esc(src)}" alt="${esc(alt)}" ${eager ? "" : 'loading="lazy"'} ${edit}>`;
   };
 
@@ -178,10 +178,15 @@
       // Intro: the showreel fills the screen, then shrinks into the first grid spot
       // while the first case slides in next to it (see setupIntro below).
       // In the editor it is shown as a plain full-width block so the video can be replaced.
-      const reel = (path) => img(S.showreel, "Showreel", path, "showreel", true);
+      // showreel = a list of images/videos shown as a carousel (a single path still works)
+      const reels = (Array.isArray(S.showreel) ? S.showreel : [S.showreel]).filter(Boolean);
+      const reel = (path) => img(reels[0], "Showreel", path, "showreel", true);
+      const carousel = () => reels.length
+        ? reels.map((src) => `<div class="reel-slide">${img(src, "Showreel", "", "showreel", true)}</div>`).join("")
+        : `<div class="img-placeholder">Showreel</div>`;
       if (window.EDITOR) {
         return `
-      <section class="container home-reel-edit"><div class="showreel">${reel("site.showreel")}</div></section>
+      <section class="container home-reel-edit"><div class="showreel">${reel(Array.isArray(S.showreel) ? "site.showreel.0" : "site.showreel")}</div></section>
       <section class="container section home-work after-intro">
         <h2 class="work-title reveal">Work</h2>
         <div class="grid">${shown.map(card).join("")}</div>
@@ -190,7 +195,7 @@
       return `
       <section class="container home-intro">
         <div class="intro-sticky">
-          <div class="showreel intro-a">${S.showreel ? reel() : `<div class="img-placeholder">Showreel</div>`}</div>
+          <div class="showreel intro-a">${carousel()}</div>
         </div>
       </section>
       <section class="container section home-work after-intro">
@@ -435,6 +440,8 @@
       els.forEach((el) => el.classList.add("in"));
     }
     setupIntro();
+    setupVideos();
+    setupCarousel();
     fitFooterGap();
     document.dispatchEvent(new Event("site:rendered"));
     learnShapes();
@@ -456,7 +463,7 @@
     a.href = projectUrl(m.p);
     a.title = m.p.title;
     a.innerHTML = isVideo(m.src)
-      ? `<video src="${esc(m.src)}" autoplay muted loop playsinline preload="metadata"></video>`
+      ? `<video src="${esc(m.src)}#t=0.1" muted playsinline preload="metadata"></video>`   /* still frame: keeps the globe smooth */
       : `<img src="${esc(m.src)}" alt="${esc(m.p.title)}">`;
     const el = a.firstElementChild;
     const learn = (w, h) => { if (w && h) onShape(w / h); };
@@ -553,6 +560,94 @@
   }
   if (!window.__footerGap) { window.__footerGap = true; window.addEventListener("resize", () => fitFooterGap()); }
 
+  /* Videos only play while they are (nearly) on screen and pause when you scroll past,
+     so the browser never decodes more than a few at once. Carousel slides and the small
+     hover previews in the case list are handled separately. */
+  let videoIO = null;
+  function setupVideos() {
+    if (videoIO) videoIO.disconnect();
+    const vids = [...document.querySelectorAll("video[data-autoplay]")]
+      .filter((v) => !v.closest(".reel-slide") && !v.closest(".case-thumb"));
+    if (!("IntersectionObserver" in window)) { vids.forEach((v) => v.play().catch(() => {})); return; }
+    videoIO = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        const v = e.target;
+        if (e.isIntersecting) { if (v.preload === "none") v.preload = "auto"; v.play().catch(() => {}); }
+        else v.pause();
+      });
+    }, { rootMargin: "300px 0px" });
+    vids.forEach((v) => videoIO.observe(v));
+    // case list previews: only play while you hover the row
+    document.querySelectorAll(".case-row").forEach((row) => {
+      const v = row.querySelector(".case-thumb video");
+      if (!v) return;
+      row.addEventListener("mouseenter", () => { v.preload = "auto"; v.play().catch(() => {}); });
+      row.addEventListener("mouseleave", () => v.pause());
+    });
+  }
+
+  /* Showreel carousel: crossfades to the next picture every 5 s; the indicator shows where you are
+     (the active dot fills up while it waits). Tap a dot to jump, swipe left/right on touch screens. */
+  let carouselOff = null;
+  function setupCarousel() {
+    if (carouselOff) { carouselOff(); carouselOff = null; }
+    const box = document.querySelector(".home-intro .showreel");
+    if (!box) return;
+    // Rule: the showreel only shows images/videos that are exactly 1920 × 1080; anything else is skipped.
+    const W = 1920, H = 1080;
+    const size = (slide) => new Promise((done) => {
+      const el = slide.querySelector("img, video");
+      if (!el) return done(false);
+      const ok = (w, h) => done(w === W && h === H);
+      if (el.tagName === "IMG") {
+        if (el.complete && el.naturalWidth) return ok(el.naturalWidth, el.naturalHeight);
+        el.addEventListener("load", () => ok(el.naturalWidth, el.naturalHeight), { once: true });
+        el.addEventListener("error", () => done(false), { once: true });
+      } else {
+        if (el.readyState >= 1) return ok(el.videoWidth, el.videoHeight);
+        el.addEventListener("loadedmetadata", () => ok(el.videoWidth, el.videoHeight), { once: true });
+        el.addEventListener("error", () => done(false), { once: true });
+      }
+    });
+    let cancelled = false;
+    carouselOff = () => { cancelled = true; };
+    const all = [...box.querySelectorAll(".reel-slide")];
+    Promise.all(all.map(size)).then((fits) => {
+      if (cancelled) return;
+      all.forEach((sl, n) => { if (!fits[n]) sl.remove(); });
+      const slides = all.filter((_, n) => fits[n]);
+      const dotsBox = box.querySelector(".reel-dots");
+      if (dotsBox) dotsBox.remove();
+      if (!slides.length) { box.insertAdjacentHTML("beforeend", `<div class="img-placeholder">Showreel</div>`); return; }
+      slides.forEach((sl, n) => sl.classList.toggle("on", n === 0));
+      const playOnly = (n) => slides.forEach((sl, k) => { const v = sl.querySelector("video"); if (!v) return; if (k === n) { v.preload = "auto"; v.play().catch(() => {}); } else v.pause(); });
+      playOnly(0);
+      if (slides.length < 2) return;
+      box.insertAdjacentHTML("beforeend", `<div class="reel-dots glass" role="tablist" aria-label="Showreel">${slides.map((_, n) =>
+        `<button class="reel-dot${n === 0 ? " on" : ""}" role="tab" aria-label="Picture ${n + 1} of ${slides.length}"></button>`).join("")}</div>`);
+      const dots = [...box.querySelectorAll(".reel-dot")];
+      const DELAY = 5000;
+      let i = 0, timer;
+      const go = (n) => {
+        slides[i].classList.remove("on"); dots[i].classList.remove("on");
+        i = (n + slides.length) % slides.length;
+        slides[i].classList.add("on");
+        void dots[i].offsetWidth;                     // restart the fill animation
+        dots[i].classList.add("on");
+        const v = slides[i].querySelector("video"); if (v) v.currentTime = 0;
+        playOnly(i);
+        clearTimeout(timer); timer = setTimeout(() => go(i + 1), DELAY);
+      };
+      box.style.setProperty("--reel-delay", `${DELAY}ms`);
+      dots.forEach((d, n) => d.addEventListener("click", (e) => { e.stopPropagation(); go(n); }));
+      let sx = null;
+      box.addEventListener("pointerdown", (e) => { sx = e.clientX; });
+      box.addEventListener("pointerup", (e) => { if (sx == null) return; const dx = e.clientX - sx; sx = null; if (Math.abs(dx) > 40) go(i + (dx < 0 ? 1 : -1)); });
+      timer = setTimeout(() => go(1), DELAY);
+      carouselOff = () => { cancelled = true; clearTimeout(timer); };
+    });
+  }
+
   /* Homepage intro: the showreel starts edge to edge, filling the screen, and while scrolling
      settles into a full-width 16:9 block (with margins and rounded corners) above the case grid. */
   let introOff = null;
@@ -597,9 +692,6 @@
       reel.style.height = `${h}px`;
       reel.style.borderRadius = `${lerp(0, RADIUS, e)}px`;
       sticky.style.height = `${h}px`;
-      // no fade-in; it fades out while it scrolls away off the top of the screen
-      const r = reel.getBoundingClientRect();
-      reel.style.opacity = clamp(r.bottom / r.height);
       return shown !== target;
     }
 

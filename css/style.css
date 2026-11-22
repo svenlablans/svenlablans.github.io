@@ -234,7 +234,6 @@ h3 { font-size: 18px; letter-spacing: -0.02em; }
 .reveal {
   opacity: 0; transform: translateY(32px);
   transition: opacity var(--reveal-time) var(--reveal-ease), transform var(--reveal-time) var(--reveal-ease);
-  will-change: opacity, transform;
 }
 .reveal.in { opacity: 1; transform: none; }
 .reveal.done { will-change: auto; }@media (prefers-reduced-motion: reduce) {
@@ -480,3 +479,26 @@ html.planet-open { overflow: hidden; }
   .home-work.after-intro { padding-top: 56px; }
   .work-title { margin-bottom: 14px; }
 }
+
+/* ===== Showreel carousel ===== */
+.home-intro .showreel { touch-action: pan-y; }
+.reel-slide { position: absolute; inset: 0; opacity: 0; transition: opacity 0.9s var(--ease); }
+.reel-slide.on { opacity: 1; }
+.reel-slide img, .reel-slide video { width: 100%; height: 100%; object-fit: cover; }
+/* indicator: a small glass pill with one dot per picture; the active one stretches and fills up */
+.reel-dots {
+  position: absolute; left: 50%; bottom: 16px; transform: translateX(-50%); z-index: 2;
+  display: flex; align-items: center; gap: 6px; padding: 8px 10px;
+}
+.reel-dot {
+  position: relative; width: 6px; height: 6px; padding: 0; border: 0; border-radius: 6px; cursor: pointer;
+  background: rgba(255, 255, 255, 0.45); overflow: hidden; transition: width 0.4s var(--ease);
+}
+.reel-dot::before { content: ""; position: absolute; inset: -10px -4px; }   /* bigger tap area */
+.reel-dot.on { width: 26px; }
+.reel-dot.on::after {
+  content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 100%; background: #fff; border-radius: 6px;
+  transform-origin: left; animation: reel-fill var(--reel-delay, 5000ms) linear forwards;
+}
+@keyframes reel-fill { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@media (prefers-reduced-motion: reduce) { .reel-dot.on::after { animation: none; } }
