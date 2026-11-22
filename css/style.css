@@ -446,3 +446,22 @@ html.planet-open { overflow: hidden; }
   .fmenu-inner a:first-child { margin: 8px 0 0; }
   .fmenu-inner a:last-child { margin: 0 0 8px; }
 }
+
+/* Phone: the showreel is a plain 16:9 block below the floating menu, no zoom */
+.home-intro.reel-still { padding-top: 72px; height: auto !important; }
+.home-intro.reel-still .intro-sticky { position: relative; }
+.home-intro.reel-still .intro-a { border-radius: var(--card-radius) !important; }
+
+/* Phone menu fix: fold the panel open with max-height (works in every mobile browser) and
+   give it its own glass; the button itself has no backdrop blur on phones, because a blurred
+   parent stops the panel inside it from blurring/rendering outside the button in Safari. */
+@media (max-width: 760px) {
+  .fmenu.glass { -webkit-backdrop-filter: none; backdrop-filter: none; }
+  .fmenu-list {
+    display: block; max-height: 0; overflow: hidden; opacity: 0;
+    background: rgba(0, 0, 0, 0.72); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px);
+    transition: max-height 0.5s var(--ease), opacity 0.3s var(--ease);
+  }
+  .site-header.open .fmenu-list { max-height: 260px; opacity: 1; }
+  .fmenu-inner { overflow: visible; }
+}

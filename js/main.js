@@ -571,6 +571,11 @@
       const W = sticky.clientWidth;                         // content width (inside the 16px margins)
       const vw = document.documentElement.clientWidth; const edge = (vw - W) / 2;            // distance to the screen edge
       m = { W, edge, fullW: vw, fullH: window.innerHeight - HEADER, endH: W * 9 / 16, D: window.innerHeight * 0.7 };
+      // phone: a landscape reel cropped to a tall screen and then shrunk looks like an odd zoom,
+      // so there it simply sits as a 16:9 block below the menu (it still fades out on scroll)
+      m.still = window.innerWidth <= 760;
+      sec.classList.toggle("reel-still", m.still);
+      if (m.still) { m.edge = 0; m.fullW = W; m.fullH = m.endH; m.D = 1; }
       // scroll distance + final height: it unpins exactly when it reaches its final size
       sec.style.height = `${m.D + m.endH}px`;
       sec.style.marginBottom = `${GAP}px`;
