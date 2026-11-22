@@ -292,7 +292,7 @@ video { display: block; max-width: 100%; }
 .card .card-meta h3 { font-size: 14px; font-weight: 500; letter-spacing: -0.015em; transition: opacity 0.4s; }
 .plus {
   position: relative; flex-shrink: 0; width: 30px; height: 30px; border-radius: 100px;
-  background: rgba(0, 0, 0, 0.27); -webkit-backdrop-filter: blur(2px); backdrop-filter: blur(2px);
+  background: rgba(0, 0, 0, 0.27); /* no blur here: a blur on every thumbnail over playing video made scrolling lag */
   transition: transform 0.4s var(--ease);
 }
 .card--dark .plus { background: rgba(255, 255, 255, 0.27); }
@@ -502,3 +502,11 @@ html.planet-open { overflow: hidden; }
 }
 @keyframes reel-fill { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 @media (prefers-reduced-motion: reduce) { .reel-dot.on::after { animation: none; } }
+
+/* Showreel shrink runs on the graphics card: scaled from the top centre, overflow at the sides is clipped */
+.intro-a { transform-origin: 50% 0; }
+html, body { overflow-x: clip; }
+
+/* Showreel as a plain block on every screen: start below the floating menu */
+.home-intro.reel-still { padding-top: 84px; }
+@media (max-width: 760px) { .home-intro.reel-still { padding-top: var(--below-menu); } }
