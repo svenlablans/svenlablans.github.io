@@ -577,12 +577,50 @@
       });
     }, { rootMargin: "300px 0px" });
     vids.forEach((v) => videoIO.observe(v));
+    addSoundButtons();
     // case list previews: only play while you hover the row
     document.querySelectorAll(".case-row").forEach((row) => {
       const v = row.querySelector(".case-thumb video");
       if (!v) return;
       row.addEventListener("mouseenter", () => { v.preload = "auto"; v.play().catch(() => {}); });
       row.addEventListener("mouseleave", () => v.pause());
+    });
+  }
+
+  /* Sound: every video starts muted. Videos that actually have sound get a small speaker button
+     in the bottom-right corner; tapping it turns the sound on (and mutes any other video). */
+  const ICON_OFF = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M17 9l5 6M22 9l-5 6"/></svg>`;
+  const ICON_ON = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19.5 5.5a9 9 0 0 1 0 13"/></svg>`;
+  function hasSound(v) {
+    if (typeof v.mozHasAudio === "boolean") return v.mozHasAudio;               // Firefox
+    if (v.audioTracks && v.audioTracks.length) return true;                      // Safari
+    return (v.webkitAudioDecodedByteCount || 0) > 0;                             // Chrome
+  }
+  function addSoundButtons() {
+    document.querySelectorAll("video[data-autoplay]").forEach((v) => {
+      if (v.closest(".case-thumb") || v.dataset.soundChecked) return;
+      v.dataset.soundChecked = "1";
+      const check = () => {
+        if (!hasSound(v) || v.parentElement.querySelector(".sound-toggle")) return;
+        const b = document.createElement("button");
+        b.type = "button";
+        b.className = "sound-toggle glass";
+        b.setAttribute("aria-label", "Turn sound on");
+        b.innerHTML = ICON_OFF;
+        b.addEventListener("click", (e) => {
+          e.preventDefault(); e.stopPropagation();                               // don't open the case when inside a card
+          const on = v.muted;
+          if (on) document.querySelectorAll("video").forEach((o) => { if (o !== v && !o.muted) { o.muted = true; const ob = o.parentElement.querySelector(".sound-toggle"); if (ob) { ob.innerHTML = ICON_OFF; ob.setAttribute("aria-label", "Turn sound on"); } } });
+          v.muted = !on;
+          if (on) v.play().catch(() => {});
+          b.innerHTML = on ? ICON_ON : ICON_OFF;
+          b.setAttribute("aria-label", on ? "Turn sound off" : "Turn sound on");
+        });
+        v.parentElement.appendChild(b);
+      };
+      // Chrome only knows after a bit of playback, the others after the metadata
+      v.addEventListener("loadedmetadata", check);
+      v.addEventListener("playing", () => setTimeout(check, 700));
     });
   }
 

@@ -20,6 +20,11 @@ window.SITE = {
   "homeImageRows": 6,
   "cases": [
     {
+      "name": "Cinema in Concert",
+      "services": "Visual identity, motion, campaign",
+      "note": ""
+    },
+    {
       "name": "JDLS",
       "services": "Branding, art direction",
       "note": ""

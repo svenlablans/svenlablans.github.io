@@ -196,7 +196,7 @@ h3 { font-size: 18px; letter-spacing: -0.02em; }
 .big-link { font-size: clamp(28px, 4vw, 52px); font-weight: 500; letter-spacing: -0.03em; word-break: break-word; }
 
 /* ===== Footer ===== */
-.site-footer { overflow: clip; background: var(--footer-bg); color: var(--footer-fg); padding: clamp(64px, 8vw, 120px) 0 20px; }
+.site-footer { overflow: clip; background: var(--footer-bg); color: var(--footer-fg); padding: clamp(40px, 4.5vw, 64px) 0 20px; }
 .cta { display: flex; flex-direction: column; align-items: flex-start; gap: 32px; max-width: 900px; }
 .cta-text { font-size: clamp(28px, 4vw, 48px); font-weight: 500; letter-spacing: -0.03em; line-height: 1.1; }
 .site-footer .btn { background: var(--footer-fg); color: var(--footer-bg); }
@@ -348,7 +348,7 @@ main { position: relative; z-index: 1; background: var(--bg); padding-bottom: cl
   border-radius: 0 0 var(--card-radius) var(--card-radius); /* rounded bottom edge over the footer */ }
 .site-footer { position: sticky; bottom: 0; z-index: 0;
   /* tuck the footer 12px under the page so the black stays visible in the rounded corners, also at the very end */
-  margin-top: calc(var(--card-radius) * -1); padding-top: calc(clamp(64px, 8vw, 120px) + var(--card-radius)); }
+  margin-top: calc(var(--card-radius) * -1); padding-top: calc(clamp(40px, 4.5vw, 64px) + var(--card-radius)); }
 
 /* Case list hover: a rounded thumbnail fades in on the right, next to "View case" (nothing moves) */
 .case-end { position: relative; display: flex; align-items: center; justify-content: flex-end; justify-self: end; }
@@ -502,3 +502,16 @@ html.planet-open { overflow: hidden; }
 }
 @keyframes reel-fill { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 @media (prefers-reduced-motion: reduce) { .reel-dot.on::after { animation: none; } }
+
+/* ===== Sound button on videos with sound (bottom-right corner) ===== */
+.card-media, .media, .project-cover, .reel-slide { position: relative; }
+.reel-slide { position: absolute; }
+.sound-toggle {
+  position: absolute; right: 14px; bottom: 14px; z-index: 3;
+  display: flex; align-items: center; justify-content: center; width: 34px; height: 34px; padding: 0;
+  border: 0; border-radius: 50%; cursor: pointer; color: #fff;
+  background: rgba(0, 0, 0, 0.45); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+  transition: transform 0.2s var(--ease), background 0.2s;
+}
+.sound-toggle:hover { transform: scale(1.08); background: rgba(0, 0, 0, 0.6); }
+@media (max-width: 760px) { .sound-toggle { width: 40px; height: 40px; right: 12px; bottom: 12px; } }
