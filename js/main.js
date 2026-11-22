@@ -366,7 +366,8 @@
       const atEnd = () => window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 80;
       window.addEventListener("scroll", () => {
         const hh = document.querySelector(".site-header");
-        if (!hh || window.EDITOR) return;
+        // not on phones: there the open menu would cover the footer text you scrolled down to read
+        if (!hh || window.EDITOR || window.innerWidth <= 760) return;
         const open = hh.classList.contains("open");
         if (atEnd() && !open) {
           autoOpened = true;

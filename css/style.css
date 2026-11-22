@@ -465,3 +465,18 @@ html.planet-open { overflow: hidden; }
   .site-header.open .fmenu-list { max-height: 260px; opacity: 1; }
   .fmenu-inner { overflow: visible; }
 }
+
+/* "Work" heading sits a little lower, closer to the thumbnails */
+.work-title { margin-bottom: 18px; }
+
+/* ===== Phone: menu clear of the status bar, content starts below the menu ===== */
+@media (max-width: 760px) {
+  :root { --menu-top: calc(env(safe-area-inset-top, 0px) + 10px); --below-menu: calc(env(safe-area-inset-top, 0px) + 10px + 44px + 32px); }
+  .site-header { top: var(--menu-top); }
+  /* first block of every page starts below the floating menu */
+  .home-intro.reel-still { padding-top: var(--below-menu); }
+  .home-work:not(.after-intro), .page-head, .project-hero { padding-top: var(--below-menu); }
+  /* showreel → Work: a calmer gap on phones */
+  .home-work.after-intro { padding-top: 56px; }
+  .work-title { margin-bottom: 14px; }
+}
