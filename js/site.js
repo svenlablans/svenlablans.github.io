@@ -10,11 +10,39 @@ window.SITE = {
     "buttonLabel": "About me",
     "buttonLink": "about.html"
   },
-  "homeProjectCount": 6,
+  "showreel": "images/showreel/showreel-cover.jpg",
+  "homeImageRows": 6,
+  "cases": [
+    {
+      "name": "JDLS",
+      "services": "Branding, art direction",
+      "note": ""
+    },
+    {
+      "name": "Atlas Coffee",
+      "services": "Packaging, branding",
+      "note": ""
+    },
+    {
+      "name": "Unfair",
+      "services": "Campaign",
+      "note": ""
+    },
+    {
+      "name": "Popronde",
+      "services": "Campaign",
+      "note": ""
+    },
+    {
+      "name": "Client name",
+      "services": "Brand strategy, art direction",
+      "note": "Confidential"
+    }
+  ],
   "about": {
     "title": "I help brands find their voice and make it look good.",
-    "intro": "Write a short introduction about yourself here — who you are, what you do and what you care about.",
-    "body": "Add a second paragraph with a bit more detail: your background, the kind of clients you work with, or how you like to work.",
+    "intro": "I’m interested in design systems that go beyond creating a consistent visual identity. Systems that have their own logic, character and room to move.",
+    "body": "By building with visual elements, rules and interactions, I create flexible identities that can adapt to different contexts, formats and media while remaining recognisable. Not a fixed set of guidelines, but a living system that keeps generating new possibilities.",
     "image": "",
     "services": [
       "Brand identity",
@@ -24,39 +52,42 @@ window.SITE = {
     ],
     "experience": [
       {
-        "role": "Freelance designer",
-        "years": "2022 — now"
+        "company": "Lava",
+        "role": "Graphic designer",
+        "years": "2024 — now"
       },
       {
-        "role": "Studio name — Designer",
-        "years": "2019 — 2022"
+        "company": "Somehow Creative Services",
+        "role": "Intern",
+        "years": "2024"
       },
       {
-        "role": "Agency name — Junior designer",
-        "years": "2017 — 2019"
+        "company": "Lava",
+        "role": "Intern",
+        "years": "2023 — 2024"
       }
     ]
   },
   "contact": {
     "title": "Let's work together.",
-    "text": "Tell me a bit about your project, timeline and budget, and I'll get back to you within two working days."
+    "text": "Tell me a bit about your project, timeline and budget, and I'll get back to you within\ntwo working days."
   },
   "cta": {
-    "text": "Have a project in mind? Let's make something sharp, clear and memorable together.",
+    "text": "Have a project in mind? Let's make something sharp and memorable together.",
     "buttonLabel": "Get in touch",
-    "buttonLink": "contact.html"
+    "buttonLink": "mailto:svenlablans@gmail.com"
   },
-  "email": "hello@example.com",
+  "email": "svenlablans@gmail.com",
   "phone": "",
   "location": "Amsterdam, NL",
   "socials": [
     {
       "label": "Instagram",
-      "url": "https://instagram.com/"
+      "url": "https://www.instagram.com/svenlablans/"
     },
     {
       "label": "LinkedIn",
-      "url": "https://linkedin.com/"
+      "url": "https://www.linkedin.com/in/svenlablans/"
     }
   ]
 };

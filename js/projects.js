@@ -23,7 +23,8 @@ window.PROJECTS = [
         "role": "Design",
         "name": "Sven Lablans"
       }
-    ]
+    ],
+    "textColor": "light"
   },
   {
     "slug": "atlas-coffee",
@@ -55,7 +56,8 @@ window.PROJECTS = [
         "role": "Design",
         "name": "Sven Lablans"
       }
-    ]
+    ],
+    "textColor": "dark"
   },
   {
     "slug": "fieldnotes",
@@ -94,7 +96,8 @@ window.PROJECTS = [
         "role": "Design",
         "name": "Sven Lablans"
       }
-    ]
+    ],
+    "textColor": "light"
   },
   {
     "slug": "lumen",
@@ -125,6 +128,63 @@ window.PROJECTS = [
         "role": "Art Direction",
         "name": "Sven Lablans"
       }
-    ]
+    ],
+    "textColor": "dark"
+  },
+  {
+    "slug": "project-5",
+    "title": "Project 5",
+    "tagline": "Tagline",
+    "client": "Client",
+    "year": "2026",
+    "type": [],
+    "cover": "",
+    "intro": "",
+    "description": [],
+    "images": [],
+    "credits": [],
+    "textColor": "dark"
+  },
+  {
+    "slug": "project-6",
+    "title": "Project 6",
+    "tagline": "Tagline",
+    "client": "Client",
+    "year": "2026",
+    "type": [],
+    "cover": "",
+    "intro": "",
+    "description": [],
+    "images": [],
+    "credits": [],
+    "textColor": "dark"
+  },
+  {
+    "slug": "project-7",
+    "title": "Project 7",
+    "tagline": "Tagline",
+    "client": "Client",
+    "year": "2026",
+    "type": [],
+    "cover": "",
+    "intro": "",
+    "description": [],
+    "images": [],
+    "credits": [],
+    "textColor": "dark"
+  },
+  {
+    "slug": "project-8",
+    "title": "Project 8",
+    "tagline": "Tagline",
+    "client": "Client",
+    "year": "2026",
+    "type": [],
+    "cover": "",
+    "intro": "",
+    "description": [],
+    "images": [],
+    "credits": [],
+    "textColor": "dark"
   }
 ];
