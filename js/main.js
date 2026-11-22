@@ -369,13 +369,7 @@
       // (unless the visitor opened it themselves).
       let autoOpened = false;
       const atEnd = () => window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 80;
-      let endTick = false;
       window.addEventListener("scroll", () => {
-        if (endTick) return;                         // check at most once per frame
-        endTick = true;
-        requestAnimationFrame(() => { endTick = false; checkEnd(); });
-      }, { passive: true });
-      function checkEnd() {
         const hh = document.querySelector(".site-header");
         // not on phones: there the open menu would cover the footer text you scrolled down to read
         if (!hh || window.EDITOR || window.innerWidth <= 760) return;
@@ -387,7 +381,7 @@
           autoOpened = false;
           hh.classList.remove("open"); hh.querySelector(".menu-toggle").setAttribute("aria-expanded", false);
         }
-      }
+      }, { passive: true });
       document.addEventListener("click", (e) => { if (e.target.closest(".menu-toggle")) autoOpened = false; }, true);
       // close when clicking outside the menu or pressing Escape
       document.addEventListener("click", (e) => {
@@ -581,7 +575,7 @@
         if (e.isIntersecting) { if (v.preload === "none") v.preload = "auto"; v.play().catch(() => {}); }
         else v.pause();
       });
-    }, { rootMargin: "0px", threshold: 0.15 });
+    }, { rootMargin: "300px 0px" });
     vids.forEach((v) => videoIO.observe(v));
     // case list previews: only play while you hover the row
     document.querySelectorAll(".case-row").forEach((row) => {
@@ -669,28 +663,18 @@
     const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
     let m = {};
 
-    // Performance: the reel keeps one fixed size (its final 16:9 block) and is only *scaled* while you
-    // scroll. Scaling runs on the graphics card; changing width/height re-laid-out the whole page every frame.
-    let secTop = 0;
     function measure() {
-      reel.style.transform = ""; reel.style.width = ""; reel.style.height = ""; reel.style.left = "";
       const W = sticky.clientWidth;                         // content width (inside the 16px margins)
-      const vw = document.documentElement.clientWidth;
-      const endH = W * 9 / 16, fullH = window.innerHeight - HEADER;
-      m = { W, endH, D: window.innerHeight * 0.7 };
-      // phone: no zoom, the reel simply sits as a 16:9 block below the menu
-      m.still = true;   // no scroll animation (it caused lag): the reel is a plain 16:9 block on every screen
+      const vw = document.documentElement.clientWidth; const edge = (vw - W) / 2;            // distance to the screen edge
+      m = { W, edge, fullW: vw, fullH: window.innerHeight - HEADER, endH: W * 9 / 16, D: window.innerHeight * 0.7 };
+      // phone: a landscape reel cropped to a tall screen and then shrunk looks like an odd zoom,
+      // so there it simply sits as a 16:9 block below the menu (it still fades out on scroll)
+      m.still = window.innerWidth <= 760;
       sec.classList.toggle("reel-still", m.still);
-      // start scale: big enough to cover the whole screen
-      m.s0 = m.still ? 1 : Math.max(vw / W, fullH / endH);
-      if (m.still) m.D = 1;
-      reel.style.width = `${W}px`;
-      reel.style.height = `${endH}px`;
-      sticky.style.height = `${endH}px`;
+      if (m.still) { m.edge = 0; m.fullW = W; m.fullH = m.endH; m.D = 1; }
       // scroll distance + final height: it unpins exactly when it reaches its final size
-      sec.style.height = m.still ? "" : `${m.D + endH}px`;
+      sec.style.height = `${m.D + m.endH}px`;
       sec.style.marginBottom = `${GAP}px`;
-      secTop = sec.getBoundingClientRect().top + window.scrollY;
       update(true);
     }
 
@@ -698,14 +682,16 @@
     let shown = null;
     const soft = (t) => 1 - Math.pow(1 - t, 3);            // ease-out: quick start, gentle landing
     function update(instant) {
-      const target = clamp((window.scrollY + HEADER - secTop) / m.D);   // no layout reads while scrolling
+      const target = clamp((HEADER - sec.getBoundingClientRect().top) / m.D);
       shown = shown == null || instant ? target : shown + (target - shown) * 0.14;
       if (Math.abs(target - shown) < 0.0005) shown = target;
       const e = soft(shown);
-      const s = lerp(m.s0, 1, e);
-      reel.style.transform = `scale(${s})`;
-      // corners grow from square to rounded; divide by the scale so they look right on screen
-      reel.style.borderRadius = `${lerp(0, RADIUS, e) / s}px`;
+      const h = lerp(m.fullH, m.endH, e);
+      reel.style.left = `${lerp(-m.edge, 0, e)}px`;
+      reel.style.width = `${lerp(m.fullW, m.W, e)}px`;
+      reel.style.height = `${h}px`;
+      reel.style.borderRadius = `${lerp(0, RADIUS, e)}px`;
+      sticky.style.height = `${h}px`;
       return shown !== target;
     }
 
@@ -716,13 +702,8 @@
       ticking = true;
       requestAnimationFrame(loop);
     };
-    window.addEventListener("resize", measure);
-    measure();
-    if (m.still) {                                   // nothing moves: don't listen to scrolling at all
-      introOff = () => window.removeEventListener("resize", measure);
-      return;
-    }
     window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", measure);
     introOff = () => {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", measure);
