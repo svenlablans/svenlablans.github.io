@@ -574,11 +574,17 @@
       // scroll distance + final height: it unpins exactly when it reaches its final size
       sec.style.height = `${m.D + m.endH}px`;
       sec.style.marginBottom = `${GAP}px`;
-      update();
+      update(true);
     }
 
-    function update() {
-      const e = ease(clamp((HEADER - sec.getBoundingClientRect().top) / m.D));
+    // the shrink follows the scroll with a bit of inertia, so it glides instead of moving 1:1 with the wheel
+    let shown = null;
+    const soft = (t) => 1 - Math.pow(1 - t, 3);            // ease-out: quick start, gentle landing
+    function update(instant) {
+      const target = clamp((HEADER - sec.getBoundingClientRect().top) / m.D);
+      shown = shown == null || instant ? target : shown + (target - shown) * 0.14;
+      if (Math.abs(target - shown) < 0.0005) shown = target;
+      const e = soft(shown);
       const h = lerp(m.fullH, m.endH, e);
       reel.style.left = `${lerp(-m.edge, 0, e)}px`;
       reel.style.width = `${lerp(m.fullW, m.W, e)}px`;
@@ -588,13 +594,15 @@
       // no fade-in; it fades out while it scrolls away off the top of the screen
       const r = reel.getBoundingClientRect();
       reel.style.opacity = clamp(r.bottom / r.height);
+      return shown !== target;
     }
 
     let ticking = false;
+    const loop = () => { if (update()) requestAnimationFrame(loop); else ticking = false; };
     const onScroll = () => {
       if (ticking) return;
       ticking = true;
-      requestAnimationFrame(() => { ticking = false; update(); });
+      requestAnimationFrame(loop);
     };
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", measure);
