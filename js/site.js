@@ -25,11 +25,6 @@ window.SITE = {
       "note": ""
     },
     {
-      "name": "JDLS",
-      "services": "Branding, art direction",
-      "note": ""
-    },
-    {
       "name": "Atlas Coffee",
       "services": "Packaging, branding",
       "note": ""
@@ -43,11 +38,6 @@ window.SITE = {
       "name": "Popronde",
       "services": "Campaign",
       "note": ""
-    },
-    {
-      "name": "Client name",
-      "services": "Brand strategy, art direction",
-      "note": "Confidential"
     }
   ],
   "about": {

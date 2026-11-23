@@ -72,7 +72,7 @@
   ];
 
   const card = (p) => `
-    <a class="card reveal${p.textColor === "dark" ? " card--dark" : ""}" href="${projectUrl(p)}">
+    <a class="card reveal${p.textColor === "dark" ? " card--dark" : ""}" href="${projectUrl(p)}" data-card="${esc(p.slug)}">
       <div class="card-media">
         ${img(p.cover, p.title)}
         <div class="card-meta">
@@ -148,8 +148,11 @@
   function caseList(S, P) {
     const cases = S.cases || [];
     const byTitle = (name) => P.find((p) => p.title.trim().toLowerCase() === String(name || "").trim().toLowerCase());
+    // Projects that aren't on the list yet are added at the end automatically
+    const listed = new Set(cases.map((c) => String(c.name || "").trim().toLowerCase()));
+    const extra = P.filter((p) => !listed.has(p.title.trim().toLowerCase()));
     return `
-      ${cases.length || window.EDITOR ? `
+      ${cases.length || extra.length || window.EDITOR ? `
       <section class="container case-section">
         <ul class="case-list" data-list="site.cases" data-new='{"name":"Client name","services":"Services","note":"Confidential"}'>
           ${cases.map((c, i) => {
@@ -164,6 +167,12 @@
               ? `<li class="case reveal"><a class="case-row" href="${projectUrl(p)}">${cells}</a></li>`
               : `<li class="case reveal${p ? "" : " is-muted"}"><div class="case-row">${cells}</div></li>`;
           }).join("")}
+          ${extra.map((p) => `
+            <li class="case reveal case-auto">${window.EDITOR ? `<div class="case-row">` : `<a class="case-row" href="${projectUrl(p)}">`}
+              <span class="case-name">${esc(p.title)}</span>
+              <span class="case-services">${esc((p.type || []).join(", "))}</span>
+              <span class="case-end">${p.cover && !window.EDITOR ? `<span class="case-thumb" aria-hidden="true">${img(p.cover, "")}</span>` : ""}<span class="case-action">View case</span></span>
+            ${window.EDITOR ? `</div>` : `</a>`}</li>`).join("")}
         </ul>
       </section>` : ""}`;
   }
@@ -173,17 +182,19 @@
     home(S, P) {
       document.title = `${S.name} — ${S.tagline}`;
       // Image grid: the first N rows (2 projects per row), then the list of cases.
-      const rows = Number(S.homeImageRows) || 6;
-      const shown = P.slice(0, rows * 2);
+      // Only the first 6 projects get a thumbnail; the rest are only in the list below.
+      const shown = P.slice(0, 6);
       // Intro: the showreel fills the screen, then shrinks into the first grid spot
       // while the first case slides in next to it (see setupIntro below).
       // In the editor it is shown as a plain full-width block so the video can be replaced.
       // showreel = a list of images/videos shown as a carousel (a single path still works)
       const reels = (Array.isArray(S.showreel) ? S.showreel : [S.showreel]).filter(Boolean);
       const reel = (path) => img(reels[0], "Showreel", path, "showreel", true);
-      const carousel = () => reels.length
-        ? reels.map((src) => `<div class="reel-slide">${img(src, "Showreel", "", "showreel", true)}</div>`).join("")
-        : `<div class="img-placeholder">Showreel</div>`;
+      // Candidates for the showreel: the showreel list plus every image/video of every case.
+      // On each visit one random candidate that is exactly 1920 × 1080 is shown (see setupCarousel).
+      // Only the 6 highlighted projects (the thumbnails below) feed the showreel.
+      const candidates = [...new Set(shown.flatMap((p) => [p.cover, ...(p.images || []).map(srcOf)]).filter(Boolean))];
+      const carousel = () => `<div class="reel-pick" data-candidates="${esc(JSON.stringify(candidates))}"></div>`;
       if (window.EDITOR) {
         return `
       <section class="container home-reel-edit"><div class="showreel">${reel(Array.isArray(S.showreel) ? "site.showreel.0" : "site.showreel")}</div></section>
@@ -630,35 +641,43 @@
   function setupCarousel() {
     if (carouselOff) { carouselOff(); carouselOff = null; }
     const box = document.querySelector(".home-intro .showreel");
-    if (!box) return;
-    // Rule: the showreel only shows images/videos that are exactly 1920 × 1080; anything else is skipped.
+    const pick = box && box.querySelector(".reel-pick");
+    if (!pick) return;
+    // Rule: only images/videos that are exactly 1920 × 1080, from the whole site, shuffled on every visit.
     const W = 1920, H = 1080;
-    const size = (slide) => new Promise((done) => {
-      const el = slide.querySelector("img, video");
-      if (!el) return done(false);
-      const ok = (w, h) => done(w === W && h === H);
-      if (el.tagName === "IMG") {
-        if (el.complete && el.naturalWidth) return ok(el.naturalWidth, el.naturalHeight);
-        el.addEventListener("load", () => ok(el.naturalWidth, el.naturalHeight), { once: true });
-        el.addEventListener("error", () => done(false), { once: true });
-      } else {
-        if (el.readyState >= 1) return ok(el.videoWidth, el.videoHeight);
-        el.addEventListener("loadedmetadata", () => ok(el.videoWidth, el.videoHeight), { once: true });
-        el.addEventListener("error", () => done(false), { once: true });
-      }
-    });
+    const list = JSON.parse(pick.dataset.candidates || "[]");
+    for (let k = list.length - 1; k > 0; k--) { const j = Math.floor(Math.random() * (k + 1)); [list[k], list[j]] = [list[j], list[k]]; }
     let cancelled = false;
     carouselOff = () => { cancelled = true; };
-    const all = [...box.querySelectorAll(".reel-slide")];
-    Promise.all(all.map(size)).then((fits) => {
+    const fits = (src) => new Promise((done) => {
+      if (isVideo(src)) {
+        const v = document.createElement("video");
+        v.preload = "metadata"; v.muted = true;
+        v.onloadedmetadata = () => done(v.videoWidth === W && v.videoHeight === H);
+        v.onerror = () => done(false);
+        v.src = src;
+      } else {
+        const i = new Image();
+        i.onload = () => done(i.naturalWidth === W && i.naturalHeight === H);
+        i.onerror = () => done(false);
+        i.src = src;
+      }
+    });
+    // check every candidate's size (only the metadata is loaded), keep the 1920 × 1080 ones,
+    // in the random order from above, and run them as a carousel
+    Promise.all(list.map(fits)).then((ok) => {
       if (cancelled) return;
-      all.forEach((sl, n) => { if (!fits[n]) sl.remove(); });
-      const slides = all.filter((_, n) => fits[n]);
-      const dotsBox = box.querySelector(".reel-dots");
-      if (dotsBox) dotsBox.remove();
-      if (!slides.length) { box.insertAdjacentHTML("beforeend", `<div class="img-placeholder">Showreel</div>`); return; }
-      slides.forEach((sl, n) => sl.classList.toggle("on", n === 0));
-      const playOnly = (n) => slides.forEach((sl, k) => { const v = sl.querySelector("video"); if (!v) return; if (k === n) { v.preload = "auto"; v.play().catch(() => {}); } else v.pause(); });
+      const reel = list.filter((_, n) => ok[n]);
+      if (!reel.length) { box.insertAdjacentHTML("beforeend", `<div class="img-placeholder">Showreel</div>`); return; }
+      box.insertAdjacentHTML("beforeend", reel.map((src, n) =>
+        `<div class="reel-slide${n === 0 ? " on" : ""}">${img(src, "Showreel", "", "showreel", n < 2)}</div>`).join(""));
+      const slides = [...box.querySelectorAll(".reel-slide")];
+      setupVideos();                                 // adds the sound button to slides that have sound
+      const playOnly = (n) => slides.forEach((sl, k) => {
+        const v = sl.querySelector("video"); if (!v) return;
+        if (k === n) { v.preload = "auto"; v.currentTime = 0; v.play().catch(() => {}); }
+        else { v.pause(); if (k === (n + 1) % slides.length) v.preload = "auto"; }   // warm up the next one
+      });
       playOnly(0);
       if (slides.length < 2) return;
       box.insertAdjacentHTML("beforeend", `<div class="reel-dots glass" role="tablist" aria-label="Showreel">${slides.map((_, n) =>
@@ -670,9 +689,8 @@
         slides[i].classList.remove("on"); dots[i].classList.remove("on");
         i = (n + slides.length) % slides.length;
         slides[i].classList.add("on");
-        void dots[i].offsetWidth;                     // restart the fill animation
+        void dots[i].offsetWidth;                    // restart the fill animation
         dots[i].classList.add("on");
-        const v = slides[i].querySelector("video"); if (v) v.currentTime = 0;
         playOnly(i);
         clearTimeout(timer); timer = setTimeout(() => go(i + 1), DELAY);
       };
@@ -685,6 +703,7 @@
       carouselOff = () => { cancelled = true; clearTimeout(timer); };
     });
   }
+
 
   /* Homepage intro: the showreel starts edge to edge, filling the screen, and while scrolling
      settles into a full-width 16:9 block (with margins and rounded corners) above the case grid. */

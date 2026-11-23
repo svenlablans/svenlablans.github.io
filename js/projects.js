@@ -72,6 +72,94 @@ window.PROJECTS = [
     "textColor": "light"
   },
   {
+    "slug": "atlas-coffee",
+    "title": "Headlines",
+    "tagline": "Flows for thought",
+    "client": "Headlines",
+    "year": "2025",
+    "type": [
+      "Hiphop Festival"
+    ],
+    "cover": "images/projects/atlas-coffee/file-mp4e-1080p-20261113175850.mp4",
+    "intro": "A hip-hop festival celebrating the art of lyricism.",
+    "description": [
+      "Each bag carries an abstract map of the farm region it came from, generated from real topographic data."
+    ],
+    "images": [
+      {
+        "src": "images/projects/atlas-coffee/tempimagecnzniy-20261113175901.jpg",
+        "shape": "portrait"
+      },
+      {
+        "src": "images/projects/atlas-coffee/file-mp4-2160p-20261113181321.mp4",
+        "shape": "portrait"
+      }
+    ],
+    "credits": [
+      {
+        "role": "Design",
+        "name": "Sven Lablans"
+      }
+    ],
+    "textColor": "dark"
+  },
+  {
+    "slug": "fieldnotes",
+    "title": "Unfair",
+    "tagline": "Campagne 2024",
+    "client": "Unfair",
+    "year": "2024",
+    "type": [
+      "Campaign"
+    ],
+    "cover": "images/projects/fieldnotes/file-20261122224532.mp4",
+    "intro": "Unfair 2025 was",
+    "description": [
+      "We stripped the interface back to the essentials and let typography do the heavy lifting."
+    ],
+    "images": [
+      {
+        "src": "images/projects/fieldnotes/tempimagei32dru-20261122225321.jpg",
+        "shape": "landscape"
+      },
+      {
+        "src": "images/projects/fieldnotes/igexport-dbju8vao7rm-20261113184519.mp4",
+        "shape": "portrait"
+      },
+      {
+        "src": "images/projects/fieldnotes/tempimagewtytkq-20261122225750.jpg",
+        "shape": "portrait"
+      },
+      {
+        "src": "images/projects/fieldnotes/tempimagep42981-20261123010124.jpg",
+        "shape": "landscape"
+      },
+      {
+        "src": "images/projects/fieldnotes/uf24-feed-snippet-4-20261113222838.mp4",
+        "shape": "portrait"
+      },
+      {
+        "src": "images/projects/fieldnotes/unfair24-20261122231409.mp4",
+        "shape": "portrait"
+      },
+      {
+        "src": "images/projects/fieldnotes/tempimageub38ts-20261122231657.jpg",
+        "shape": "landscape"
+      },
+      {
+        "src": "images/projects/fieldnotes/tempimagetk25sh-20261123010149.jpg",
+        "shape": "landscape"
+      }
+    ],
+    "credits": [
+      {
+        "role": "Design",
+        "name": "Sven Lablans"
+      }
+    ],
+    "textColor": "light"
+  },
+  {
     "slug": "northwind",
     "title": "Krib",
     "tagline": "Bringing transparency in real estate",
@@ -104,68 +192,59 @@ window.PROJECTS = [
     "textColor": "light"
   },
   {
-    "slug": "atlas-coffee",
-    "title": "Atlas Coffee",
-    "tagline": "Every origin, one cup",
-    "client": "Atlas Coffee Co.",
-    "year": "2025",
+    "slug": "victorie",
+    "title": "Victorie",
+    "tagline": "Short tagline",
+    "client": "Client",
+    "year": "2026",
     "type": [
-      "Packaging",
       "Branding"
     ],
-    "cover": "images/projects/atlas-coffee/file-mp4e-1080p-20261113175850.mp4",
-    "intro": "A packaging system that turns each single-origin bean into its own small map.",
+    "cover": "images/projects/victorie/file-mp4-1080p-6-20261123005258.mp4",
+    "intro": "One sentence about this project.",
     "description": [
-      "Each bag carries an abstract map of the farm region it came from, generated from real topographic data."
+      "Describe the project here."
     ],
     "images": [
       {
-        "src": "images/projects/atlas-coffee/tempimagecnzniy-20261113175901.jpg",
+        "src": "images/projects/victorie/victorie-logoanim-1080x1350-20261123005351.mp4",
         "shape": "portrait"
       },
       {
-        "src": "images/projects/atlas-coffee/file-mp4-2160p-20261113181321.mp4",
-        "shape": "portrait"
-      }
-    ],
-    "credits": [
-      {
-        "role": "Design",
-        "name": "Sven Lablans"
-      }
-    ],
-    "textColor": "dark"
-  },
-  {
-    "slug": "fieldnotes",
-    "title": "Unfair",
-    "tagline": "Campagne 2024",
-    "client": "Unfair",
-    "year": "2024",
-    "type": [
-      "Campaign"
-    ],
-    "cover": "images/projects/fieldnotes/tempimagelhpmuw-20261113174910.jpg",
-    "intro": "Unfair 2025 was",
-    "description": [
-      "We stripped the interface back to the essentials and let typography do the heavy lifting."
-    ],
-    "images": [
-      {
-        "src": "images/projects/fieldnotes/igexport-dbju8vao7rm-20261113184519.mp4",
+        "src": "images/projects/victorie/tempimages6oxpf-20261123005416.jpg",
         "shape": "portrait"
       },
       {
-        "src": "images/projects/fieldnotes/uf24-feed-snippet-4-20261113222903.mp4",
-        "shape": "portrait"
-      },
-      {
-        "src": "images/projects/fieldnotes/tempimagevvjgl5-20261113222803.jpg",
+        "src": "images/projects/victorie/tempimageghws9q-20261123005443.jpg",
         "shape": "landscape"
       },
       {
-        "src": "images/projects/fieldnotes/uf24-feed-snippet-4-20261113222838.mp4",
+        "src": "images/projects/victorie/tempimage0dzzw5-20261123005317.jpg",
         "shape": "portrait"
+      },
+      {
+        "src": "images/projects/victorie/tempimagev8ezmr-20261123005336.jpg",
+        "shape": "portrait"
+      },
+      {
+        "src": "images/projects/victorie/tempimagexeowav-20261123005324.jpg",
+        "shape": "landscape"
+      },
+      {
+        "src": "images/projects/victorie/tempimagecw1rp0-20261123005432.jpg",
+        "shape": "portrait"
+      },
+      {
+        "src": "images/projects/victorie/tempimageahd4ux-20261123005438.jpg",
+        "shape": "portrait"
+      },
+      {
+        "src": "images/projects/victorie/tempimage3guvvj-20261123005630.jpg",
+        "shape": "landscape"
+      },
+      {
+        "src": "images/projects/victorie/tempimagebcxe6c-20261123005707.jpg",
+        "shape": "landscape"
       }
     ],
     "credits": [
@@ -173,8 +252,46 @@ window.PROJECTS = [
         "role": "Design",
         "name": "Sven Lablans"
       }
+    ]
+  },
+  {
+    "slug": "project-5",
+    "title": "SOENDA",
+    "tagline": "Techno festival",
+    "client": "Client",
+    "year": "2026",
+    "type": [],
+    "cover": "images/projects/project-5/1920x1080-lineupteaser-20261122234512.mp4",
+    "intro": "",
+    "description": [],
+    "images": [
+      {
+        "src": "images/projects/project-5/1920x1080-lineupteaser-20261122234506.mp4",
+        "shape": "landscape"
+      },
+      {
+        "src": "images/projects/project-5/soenda-detail-motion-20261122233532.mp4",
+        "shape": "portrait"
+      },
+      {
+        "src": "images/projects/project-5/image00005-20261122233744.jpg",
+        "shape": "portrait"
+      },
+      {
+        "src": "images/projects/project-5/tempimage7lknus-20261122233814.jpg",
+        "shape": "landscape"
+      },
+      {
+        "src": "images/projects/project-5/soendapost-20261122233848.mp4",
+        "shape": "portrait"
+      },
+      {
+        "src": "images/projects/project-5/soenda-social-teaser-20261122234003.mp4",
+        "shape": "portrait"
+      }
     ],
-    "textColor": "light"
+    "credits": [],
+    "textColor": "dark"
   },
   {
     "slug": "lumen",
@@ -185,7 +302,7 @@ window.PROJECTS = [
     "type": [
       "Campaign"
     ],
-    "cover": "images/projects/lumen/1-l-20261113185116.mp4",
+    "cover": "images/projects/lumen/comp-1-2-20261123001437.mp4",
     "intro": "A launch campaign for a lighting brand, shot entirely at dusk.",
     "description": [
       "The campaign leaned into the hour when artificial and natural light meet."
@@ -209,58 +326,53 @@ window.PROJECTS = [
     "textColor": "dark"
   },
   {
-    "slug": "project-5",
-    "title": "Project 5",
-    "tagline": "Tagline",
-    "client": "Client",
-    "year": "2026",
-    "type": [],
-    "cover": "",
-    "intro": "",
-    "description": [],
-    "images": [],
-    "credits": [],
-    "textColor": "dark"
-  },
-  {
     "slug": "project-6",
-    "title": "Project 6",
-    "tagline": "Tagline",
+    "title": "TAR",
+    "tagline": "Theater aan de Rijn",
     "client": "Client",
     "year": "2026",
     "type": [],
-    "cover": "",
+    "cover": "images/projects/project-6/tar-case-intro-4-5-remapped-eng-20261123001557.mp4",
     "intro": "",
     "description": [],
-    "images": [],
-    "credits": [],
-    "textColor": "dark"
-  },
-  {
-    "slug": "project-7",
-    "title": "Project 7",
-    "tagline": "Tagline",
-    "client": "Client",
-    "year": "2026",
-    "type": [],
-    "cover": "",
-    "intro": "",
-    "description": [],
-    "images": [],
-    "credits": [],
-    "textColor": "dark"
-  },
-  {
-    "slug": "project-8",
-    "title": "Project 8",
-    "tagline": "Tagline",
-    "client": "Client",
-    "year": "2026",
-    "type": [],
-    "cover": "",
-    "intro": "",
-    "description": [],
-    "images": [],
+    "images": [
+      {
+        "src": "images/projects/project-6/tar-case-intro-4-5-remapped-eng-20261123000430.mp4",
+        "shape": "portrait"
+      },
+      {
+        "src": "images/projects/project-6/tempimagest5t1q-20261123000443.jpg",
+        "shape": "portrait"
+      },
+      {
+        "src": "images/projects/project-6/tempimageokoorn-20261123000507.jpg",
+        "shape": "landscape"
+      },
+      {
+        "src": "images/projects/project-6/260921-website-overview-20261123000620.mp4",
+        "shape": "portrait"
+      },
+      {
+        "src": "images/projects/project-6/tempimage2w4myo-20261123000539.jpg",
+        "shape": "portrait"
+      },
+      {
+        "src": "images/projects/project-6/tempimage4gc3ou-20261123000657.jpg",
+        "shape": "landscape"
+      },
+      {
+        "src": "images/projects/project-6/tempimageheh6t2-20261123000803.jpg",
+        "shape": "landscape"
+      },
+      {
+        "src": "images/projects/project-6/tempimagep9mwdn-20261123000729.jpg",
+        "shape": "portrait"
+      },
+      {
+        "src": "images/projects/project-6/tempimagegwrt6y-20261123000838.jpg",
+        "shape": "portrait"
+      }
+    ],
     "credits": [],
     "textColor": "dark"
   }
